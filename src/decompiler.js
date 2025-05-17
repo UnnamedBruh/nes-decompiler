@@ -1,3 +1,5 @@
+// All of this is written by AI; I don't guarantee any complete accuracy on any part of this snippet.
+
 const OPCODES = {
   0x00: { mnemonic: "BRK", mode: "implied", size: 1 },
   0x01: { mnemonic: "ORA", mode: "indirectX", size: 2 },
