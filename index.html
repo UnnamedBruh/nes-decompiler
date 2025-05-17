@@ -1,0 +1,24 @@
+<input type="file" id="nes">
+<script src="src/decompiler.js"></script>
+<script>
+	const fil = document.getElementById("nes");
+	let res;
+	fil.oninput = function(e) {
+		const game = e.target.files[0];
+		if (game) {
+			const fileR = new FileReader();
+			fileR.onload = function(data) {
+				const result = parseNES(data);
+				if (result.type === "success") {
+					const machine = document.createElement("pre");
+					document.body.appendChild(machine);
+					machine.textContent = result.rom.machineCode;
+				} else {
+					alert(result.error);
+				}
+				res = result;
+			}
+			fileR.readAsArrayBuffer(game);
+		}
+	}
+</script>
