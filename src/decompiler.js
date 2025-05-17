@@ -120,7 +120,9 @@ function formatOperand(mode, bytes) {
     case "absolute":
       return wordToHex(bytes[0], bytes[1]);
     case "relative":
-      return byteToHex(bytes[0]); // could also compute PC-relative target
+      const offset = bytes[0] < 0x80 ? bytes[0] : bytes[0] - 0x100; // signed byte
+      const target = pc + 2 + offset;
+      return `$${target.toString(16).padStart(4, '0')}`;
     case "indirect":
       return `(${wordToHex(bytes[0], bytes[1])})`;
     case "indirectX":
@@ -222,6 +224,8 @@ function parseNES(arrayBuff) {
   const trainerData = hasTrainer ? data.slice(16, 16 + 512) : null;
   const prgRom = data.slice(prgStart, prgStart + prgRomSize);
   const chrRom = data.slice(chrStart, chrStart + chrRomSize);
+
+  const machineCode = disassemble6502(prgRom);
 
   return {
     type: "success",
