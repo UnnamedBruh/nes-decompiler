@@ -8,7 +8,7 @@
 		if (game) {
 			const fileR = new FileReader();
 			fileR.onload = function(data) {
-				const result = parseNES(data);
+				const result = parseNES(data.result);
 				if (result.type === "success") {
 					const machine = document.createElement("pre");
 					document.body.appendChild(machine);
