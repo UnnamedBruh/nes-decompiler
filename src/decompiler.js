@@ -97,7 +97,7 @@ function disassemble6502(prgRom) {
     const operandBytes = prgRom.slice(pc + 1, pc + entry.size);
     const address = `$${pc.toString(16).padStart(4, '0')}`;
     const mnemonic = entry.mnemonic;
-    const operand = formatOperand(entry.mode, operandBytes);
+    const operand = formatOperand(entry.mode, operandBytes, pc);
     const description = describeInstruction(mnemonic);
 
     output.push(`${address}: ${mnemonic} ${operand} — ${description}`);
@@ -108,7 +108,7 @@ function disassemble6502(prgRom) {
 }
 
 // Formats operands based on addressing mode
-function formatOperand(mode, bytes) {
+function formatOperand(mode, bytes, pc) {
   const byteToHex = (b) => `$${b.toString(16).padStart(2, '0')}`;
   const wordToHex = (lo, hi) => `$${((hi << 8) | lo).toString(16).padStart(4, '0')}`;
 
