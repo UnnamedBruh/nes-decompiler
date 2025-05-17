@@ -185,6 +185,35 @@ function describeInstruction(mnemonic) {
   return descMap[mnemonic] || "Unknown instruction behavior";
 }
 
+function decodeChrTiles(chrRom) {
+  const tiles = [];
+  const tileCount = Math.floor(chrRom.length / 16);
+
+  for (let t = 0; t < tileCount; t++) {
+    const tile = [];
+    const base = t * 16;
+
+    for (let row = 0; row < 8; row++) {
+      const plane0 = chrRom[base + row];
+      const plane1 = chrRom[base + row + 8];
+      const pixels = [];
+
+      for (let col = 0; col < 8; col++) {
+        // bits are read MSB to LSB left to right
+        const bit0 = (plane0 >> (7 - col)) & 1;
+        const bit1 = (plane1 >> (7 - col)) & 1;
+        pixels.push(bit0 | (bit1 << 1)); // combine bits into 0-3 color index
+      }
+
+      tile.push(pixels);
+    }
+
+    tiles.push(tile);
+  }
+
+  return tiles;
+}
+
 function parseNES(arrayBuff) {
   const data = new Uint8Array(arrayBuff);
 
@@ -226,6 +255,7 @@ function parseNES(arrayBuff) {
   const chrRom = data.slice(chrStart, chrStart + chrRomSize);
 
   const machineCode = disassemble6502(prgRom);
+  const tiles = decodeChrTiles(chrRom);
 
   return {
     type: "success",
@@ -241,7 +271,9 @@ function parseNES(arrayBuff) {
     rom: {
       prg: prgRom,
       chr: chrRom,
-      trainer: trainerData
+      trainer: trainerData,
+      machineCode,
+      tiles
     }
   };
 }
