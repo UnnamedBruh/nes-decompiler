@@ -8,6 +8,8 @@
 		if (game) {
 			const fileR = new FileReader();
 			fileR.onload = function(data) {
+				alert(JSON.stringify(data));
+				alert(data.result);
 				const result = parseNES(data.result);
 				if (result.type === "success") {
 					const machine = document.createElement("pre");
