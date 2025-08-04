@@ -427,6 +427,7 @@ function parseNES(arrayBuff) {
 
   const trainerData = hasTrainer ? data.slice(16, 16 + 512) : null;
   const prgRom = data.slice(prgStart, prgStart + prgRomSize);
+  console.log(prgRom);
   const chrRom = data.slice(chrStart, chrStart + chrRomSize);
 
   const machineCode = disassemble6502(prgRom);
