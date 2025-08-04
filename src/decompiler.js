@@ -231,7 +231,7 @@ function disassemble6502(prgRom) {
   const output = [];
   let pc = 0;
 
-  while (pc < prgRom.length) {
+  while (pc < prgRom.length || pc < 0x4000) {
     const opcode = prgRom[pc];
     const entry = OPCODES[opcode];
 
